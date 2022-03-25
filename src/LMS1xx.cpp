@@ -3,12 +3,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-//#include <cstdio>
-//#include <cstdlib>
-//#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <errno.h>
 #include <fcntl.h>
-//#include <unistd.h>
+#include <unistd.h>
 #include <memory>
 #include <chrono>
 #include <iostream>
@@ -62,29 +62,29 @@ bool LMS1xx::isConnected()
 void LMS1xx::startMeas()
 {
   char buf[100];
-  sprintf(buf, "%c%s%c", 0x02, "sMN LMCstartmeas", 0x03);
+  std::cout << buf << 0x02 << " sMN LMCstartmeas " << 0x03 << std::endl;
 
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 }
 
 void LMS1xx::stopMeas()
 {
   char buf[100];
-  sprintf(buf, "%c%s%c", 0x02, "sMN LMCstopmeas", 0x03);
+  std::cout << buf << 0x02 << " sMN LMCstartmeas " << 0x03 << std::endl;
 
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 }
 
 status_t LMS1xx::queryStatus()
@@ -96,9 +96,9 @@ status_t LMS1xx::queryStatus()
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 
   int ret;
   sscanf((buf + 10), "%d", &ret);
@@ -132,9 +132,9 @@ void LMS1xx::login()
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 }
 
 scanCfg LMS1xx::getScanCfg() const
@@ -147,9 +147,9 @@ scanCfg LMS1xx::getScanCfg() const
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 
   sscanf(buf + 1, "%*s %*s %X %*d %X %X %X", &cfg.scaningFrequency,
          &cfg.angleResolution, &cfg.startAngle, &cfg.stopAngle);
@@ -177,7 +177,7 @@ void LMS1xx::setScanDataCfg(const scanDataCfg &cfg)
           "sWN LMDscandatacfg", cfg.outputChannel, cfg.remission ? 1 : 0,
           cfg.resolution, cfg.encoder, cfg.position ? 1 : 0,
           cfg.deviceName ? 1 : 0, cfg.timestamp ? 1 : 0, cfg.outputInterval, 0x03);
-  printf("TX: %s", buf);
+  std::cout << "TX " << buf << std::endl;
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
@@ -209,10 +209,10 @@ void LMS1xx::scanContinous(int start)
   int len = read(socket_fd_, buf, 100);
 
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
 
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 }
 
 bool LMS1xx::getScanData(scanData* scan_data)
@@ -453,7 +453,7 @@ void LMS1xx::saveConfig()
   int len = read(socket_fd_, buf, 100);
 
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
   printf("RX: %s", buf);
 }
@@ -468,7 +468,7 @@ void LMS1xx::startDevice()
   int len = read(socket_fd_, buf, 100);
 
   if (buf[0] != 0x02)
-    printf("invalid packet recieved");
+    std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX " << buf << std::endl;
 }
