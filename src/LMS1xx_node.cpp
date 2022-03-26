@@ -26,7 +26,17 @@ void Sick::connect_lidar()
 
   if (!laser.isConnected())
   {
-    RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
+    //Attempt to connect to the lidar 5 times before giving up
+    while(!laser.isConnected()){
+      RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
+      RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
+      laser.connect(host, port);
+      if(reconnect_timeout > 5){
+        RCLCPP_FATAL(this->get_logger(), "Unable to connect to Lidar after 5 attempts!");
+        return;
+      }
+      reconnect_timeout++;
+    }
     return;
   }
 
