@@ -27,15 +27,24 @@ void Sick::connect_lidar()
   if (!laser.isConnected())
   {
     //Attempt to connect to the lidar 5 times before giving up
-    while(!laser.isConnected()){
-      RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
-      RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
+    RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
+
+    do
+    {
       laser.connect(host, port);
-      if(reconnect_timeout > 5){
+    }
+    while(!laser.isConnected())
+    {
+      RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
+      if (reconnect_timeout > 5)
+      {
         RCLCPP_FATAL(this->get_logger(), "Unable to connect to Lidar after 5 attempts!");
         return;
       }
-      reconnect_timeout++;
+      else
+      {
+        reconnect_timeout++;
+      }
     }
     return;
   }
@@ -115,7 +124,7 @@ void Sick::get_measurements()
   rclcpp::Time ready_status_timeout = this->get_clock()->now() + rclcpp::Duration::from_seconds(5);
 
   status_t stat = laser.queryStatus();
-  rclcpp::Duration::from_nanoseconds(1000);
+  rclcpp::Duration::from_seconds(1);
   if (stat != ready_for_measurement)
   {
     RCLCPP_ERROR(this->get_logger(),"Laser not ready. Retrying initialization.");
@@ -174,9 +183,9 @@ int main(int argc, char * argv[])
   rclcpp::init(argc,argv);
   rclcpp::executors::SingleThreadedExecutor exec;
   rclcpp::NodeOptions options;
-  auto lp_node = std::make_shared<Sick::Sick>(options);
-  exec.add_node(lp_node);
-  lp_node->connect_lidar();
+  auto sick_node = std::make_shared<Sick::Sick>(options);
+  exec.add_node(sick_node);
+  sick_node->connect_lidar();
   exec.spin();
   rclcpp::shutdown();
   return 0;
