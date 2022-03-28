@@ -12,7 +12,7 @@ Sick::Sick(rclcpp::NodeOptions options)
 {
   host = this->declare_parameter("host", "192.168.1.100");
   frame_id = this->declare_parameter("frame_id", "laser_link");
-  port = this->declare_parameter("port", 2111);
+  port = this->declare_parameter("port", 2112);
   tf_correction = this->declare_parameter("tf_correction", true);
 
   ls_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>(
@@ -108,11 +108,11 @@ void Sick::get_measurements()
   RCLCPP_INFO(this->get_logger(), "Setting scan data configuration.");
   laser.setScanDataCfg(dataCfg);
 
-  RCLCPP_INFO(this->get_logger(),"Setting scan data configuration.");
+  RCLCPP_INFO(this->get_logger(), "Starting scan measurement.");
   laser.startMeas();
 
   RCLCPP_INFO(this->get_logger(),"Waiting for ready status.");
-  rclcpp::Time ready_status_timeout = this->get_clock()->now() + rclcpp::Duration::from_nanoseconds(5000);
+  rclcpp::Time ready_status_timeout = this->get_clock()->now() + rclcpp::Duration::from_seconds(5);
 
   status_t stat = laser.queryStatus();
   rclcpp::Duration::from_nanoseconds(1000);
