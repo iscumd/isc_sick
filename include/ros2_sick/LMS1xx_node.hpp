@@ -63,6 +63,7 @@ private:
     std::string frame_id{};
     int port{2112};
     bool tf_correction{};
+    int reconnect_timeout{0};
     sensor_msgs::msg::LaserScan scan_msg;
 
     // publishers

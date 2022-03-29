@@ -62,8 +62,9 @@ bool LMS1xx::isConnected()
 void LMS1xx::startMeas()
 {
   char buf[100];
-  std::cout << buf << 0x02 << " sMN LMCstartmeas " << 0x03 << std::endl;
-
+ //std::cout << buf << 0x02 << " sMN LMCstartmeas " << 0x03 << std::endl;
+	
+	sprintf(buf, "%c%s%c", 0x02, "sMN LMCstartmeas", 0x03);
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
@@ -111,7 +112,7 @@ void LMS1xx::login()
   char buf[100];
   int result;
   sprintf(buf, "%c%s%c", 0x02, "sMN SetAccessMode 03 F4724744", 0x03);
-
+	std::cout << buf << 0x02 << " sMN SetAccessMode 03 F4724744 " << 0x03 << std::endl;
   fd_set readset;
   struct timeval timeout;
 
@@ -178,6 +179,7 @@ void LMS1xx::setScanDataCfg(const scanDataCfg &cfg)
           cfg.resolution, cfg.encoder, cfg.position ? 1 : 0,
           cfg.deviceName ? 1 : 0, cfg.timestamp ? 1 : 0, cfg.outputInterval, 0x03);
   std::cout << "TX " << buf << std::endl;
+
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
@@ -194,7 +196,7 @@ scanOutputRange LMS1xx::getScanOutputRange() const
 
   int len = read(socket_fd_, buf, 100);
 
-  sscanf(buf + 1, "%*s %*s %*d %X %X %X", &outputRange.angleResolution,
+ sscanf(buf + 1, "%*s %*s %*d %X %X %X", &outputRange.angleResolution,
          &outputRange.startAngle, &outputRange.stopAngle);
   return outputRange;
 }
@@ -228,11 +230,11 @@ bool LMS1xx::getScanData(scanData* scan_data)
     // that's non-POSIX (doesn't work on OS X, for example).
     struct timeval tv;
     tv.tv_sec = 0;
-    tv.tv_usec = 100000;
+    tv.tv_usec = 400000;
 
-    printf("entering select()", tv.tv_usec);
+    //std::cout << "entering select() " << tv.tv_usec << std::endl;
     int retval = select(socket_fd_ + 1, &rfds, NULL, NULL, &tv);
-    printf("returned %d from select()", retval);
+    //std::cout << "returned " << retval << "from select()" << std::endl;
     if (retval)
     {
       buffer_.readFrom(socket_fd_);
@@ -289,7 +291,7 @@ void LMS1xx::parseScanData(char* buffer, scanData* data)
   tok = strtok(NULL, " "); //NumberChannels16Bit
   int NumberChannels16Bit;
   sscanf(tok, "%d", &NumberChannels16Bit);
-  printf("NumberChannels16Bit : %d", NumberChannels16Bit);
+  //std::cout << "NumberChannels16Bit : " << NumberChannels16Bit << std::endl;
 
   for (int i = 0; i < NumberChannels16Bit; i++)
   {
@@ -320,7 +322,7 @@ void LMS1xx::parseScanData(char* buffer, scanData* data)
     tok = strtok(NULL, " "); //NumberData
     int NumberData;
     sscanf(tok, "%X", &NumberData);
-    printf("NumberData : %d", NumberData);
+    //std::cout << "NumberData : "  << NumberData << std::endl;
 
     if (type == 0)
     {
@@ -368,7 +370,7 @@ void LMS1xx::parseScanData(char* buffer, scanData* data)
   tok = strtok(NULL, " "); //NumberChannels8Bit
   int NumberChannels8Bit;
   sscanf(tok, "%d", &NumberChannels8Bit);
-  printf("NumberChannels8Bit : %d\n", NumberChannels8Bit);
+  //std::cout << "NumberChannels8Bit : " << NumberChannels8Bit << std::endl;
 
   for (int i = 0; i < NumberChannels8Bit; i++)
   {
@@ -399,7 +401,7 @@ void LMS1xx::parseScanData(char* buffer, scanData* data)
     tok = strtok(NULL, " "); //NumberData
     int NumberData;
     sscanf(tok, "%X", &NumberData);
-    printf("NumberData : %d\n", NumberData);
+    //std::cout << "NumberData : " << NumberData << std::endl;
 
     if (type == 0)
     {
@@ -455,7 +457,7 @@ void LMS1xx::saveConfig()
   if (buf[0] != 0x02)
     std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  printf("RX: %s", buf);
+  std::cout << "RX: " << buf << std::endl;
 }
 
 void LMS1xx::startDevice()
