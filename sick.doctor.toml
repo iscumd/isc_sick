@@ -1,0 +1,38 @@
+#ROS package you are documenting
+package_name = "ros2_sick"
+repo = ""
+
+#You can have multiple nodes in one package
+[[nodes]]
+node_name = 'ros2_sick'
+#Relitive to this file
+source_file = ['./src/ros2_sick.cpp']
+summary = '''
+This is your node summary.
+'''
+# (optional)
+potential_improvements = 'Lots and Lots of refactoring'
+# (optional)
+misc = 'An (optional) description of something else.'
+
+#Your published topics (optional)
+[[nodes.publishes]]
+name = '/scan'
+description = 'laserscan topic'
+
+[[nodes.publishes]]
+name = '/points'
+description = 'pointcloud2 topic'
+
+#Your launchfile info (optional)
+[nodes.launch]
+file_path = './launch/ros2_sick.launch.py'
+usage = 'just launch I guess'
+
+[[nodes.launch.args]]
+name = 'arg1'
+description = 'Some arg to the launchfile'
+
+[[nodes.launch.args]]
+name = 'arg2'
+description = 'Another arg to the launchfile'
