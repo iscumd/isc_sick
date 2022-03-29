@@ -12,7 +12,7 @@ Sick::Sick(rclcpp::NodeOptions options)
 {
   host = this->declare_parameter("host", "192.168.1.100");
   frame_id = this->declare_parameter("frame_id", "laser_link");
-  port = this->declare_parameter("port", 2111);
+  port = this->declare_parameter("port", 2112);
   tf_correction = this->declare_parameter("tf_correction", true);
 
   ls_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>(
@@ -26,7 +26,26 @@ void Sick::connect_lidar()
 
   if (!laser.isConnected())
   {
-    RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
+    //Attempt to connect to the lidar 5 times before giving up
+    RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
+
+    do
+    {
+      laser.connect(host, port);
+    }
+    while(!laser.isConnected())
+    {
+      RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
+      if (reconnect_timeout > 5)
+      {
+        RCLCPP_FATAL(this->get_logger(), "Unable to connect to Lidar after 5 attempts!");
+        return;
+      }
+      else
+      {
+        reconnect_timeout++;
+      }
+    }
     return;
   }
 
@@ -98,14 +117,14 @@ void Sick::get_measurements()
   RCLCPP_INFO(this->get_logger(), "Setting scan data configuration.");
   laser.setScanDataCfg(dataCfg);
 
-  RCLCPP_INFO(this->get_logger(),"Setting scan data configuration.");
+  RCLCPP_INFO(this->get_logger(), "Starting scan measurement.");
   laser.startMeas();
 
   RCLCPP_INFO(this->get_logger(),"Waiting for ready status.");
-  rclcpp::Time ready_status_timeout = this->get_clock()->now() + rclcpp::Duration::from_nanoseconds(5000);
+  rclcpp::Time ready_status_timeout = this->get_clock()->now() + rclcpp::Duration::from_seconds(5);
 
   status_t stat = laser.queryStatus();
-  rclcpp::Duration::from_nanoseconds(1000);
+  rclcpp::Duration::from_seconds(1);
   if (stat != ready_for_measurement)
   {
     RCLCPP_ERROR(this->get_logger(),"Laser not ready. Retrying initialization.");
@@ -164,9 +183,9 @@ int main(int argc, char * argv[])
   rclcpp::init(argc,argv);
   rclcpp::executors::SingleThreadedExecutor exec;
   rclcpp::NodeOptions options;
-  auto lp_node = std::make_shared<Sick::Sick>(options);
-  exec.add_node(lp_node);
-  lp_node->connect_lidar();
+  auto sick_node = std::make_shared<Sick::Sick>(options);
+  exec.add_node(sick_node);
+  sick_node->connect_lidar();
   exec.spin();
   rclcpp::shutdown();
   return 0;
