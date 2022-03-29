@@ -1,38 +1,40 @@
-#ROS package you are documenting
 package_name = "ros2_sick"
-repo = ""
+repo = "https://github.com/iscumd/isc_sick"
 
-#You can have multiple nodes in one package
 [[nodes]]
 node_name = 'ros2_sick'
 #Relitive to this file
 source_file = ['./src/ros2_sick.cpp']
 summary = '''
-This is your node summary.
+This is a Ros2 Driver for the Sick LMS-111 2D LiDAR.
+
+Currently only supports POSIX operating systems.
 '''
-# (optional)
-potential_improvements = 'Lots and Lots of refactoring'
-# (optional)
-misc = 'An (optional) description of something else.'
 
-#Your published topics (optional)
-[[nodes.publishes]]
-name = '/scan'
-description = 'laserscan topic'
+potential_improvements = '''Lots and Lots of refactoring'''
 
 [[nodes.publishes]]
-name = '/points'
-description = 'pointcloud2 topic'
+name = '/sick/scan'
+description = 'laserscans from the LiDAR'
 
-#Your launchfile info (optional)
+[[nodes.params]]
+name = 'host'
+description = 'IP of the LiDAR'
+
+[[nodes.params]]
+name = 'frame_id'
+description = 'Frame the LiDAR publishes to.'
+
+[[nodes.params]]
+name = 'port'
+description = 'Port the LiDAR is listening on.'
+
+[[nodes.params]]
+name = 'tf_correction'
+description = 'Corrects scan angle for the tf frame(?)'
+
 [nodes.launch]
 file_path = './launch/ros2_sick.launch.py'
-usage = 'just launch I guess'
-
-[[nodes.launch.args]]
-name = 'arg1'
-description = 'Some arg to the launchfile'
-
-[[nodes.launch.args]]
-name = 'arg2'
-description = 'Another arg to the launchfile'
+usage = ''' 
+Just launches the node without args.
+'''
