@@ -17,14 +17,15 @@ Currently only supports POSIX operating systems.
 - `host`: IP of the LiDAR
 - `frame_id`: Frame the LiDAR publishes to.
 - `port`: Port the LiDAR is listening on.
-- `tf_correction`: Corrects scan angle for the tf frame
+- `tf_correction`: Corrects scan angle for the tf frame(?)
 
 ## Potential Improvements
 Lots and Lots of refactoring 
 
-# Launch 
- `./launch/ros2_sick.launch.py` 
+# Launch
+## File 
+ ./launch/ros2_sick.launch.py 
+ 
   
 Just launches the node without args.
- 
 

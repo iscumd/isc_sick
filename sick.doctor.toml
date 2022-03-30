@@ -33,7 +33,7 @@ description = 'Port the LiDAR is listening on.'
 name = 'tf_correction'
 description = 'Corrects scan angle for the tf frame(?)'
 
-[nodes.launch]
+[[nodes.launch]]
 file_path = './launch/ros2_sick.launch.py'
 usage = ''' 
 Just launches the node without args.
