@@ -28,13 +28,10 @@ void Sick::connect_lidar()
   {
     //Attempt to connect to the lidar 5 times before giving up
     RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
-
-    do
-    {
-      laser.connect(host, port);
-    }
+    
     while(!laser.isConnected())
     {
+      laser.connect(host, port);
       RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
       if (reconnect_timeout > 5)
       {
@@ -143,7 +140,6 @@ void Sick::get_measurements()
     scan_msg.header.stamp = this->get_clock()->now();
 
     scanData data;
-    RCLCPP_INFO(this->get_logger(),"Reading scan data.");
     if (laser.getScanData(&data))
     {
       for (int i = 0; i < data.dist_len1; i++)
@@ -155,8 +151,6 @@ void Sick::get_measurements()
       {
         scan_msg.intensities[i] = data.rssi1[i];
       }
-
-      RCLCPP_INFO(this->get_logger(),"Publishing scan data.");
       publish_scan();
     }
     else
