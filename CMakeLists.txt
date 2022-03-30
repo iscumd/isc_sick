@@ -46,7 +46,7 @@ target_compile_features(ros2_sick PUBLIC c_std_99 cxx_std_17)  # Require C99 and
 install(TARGETS ros2_sick
   DESTINATION lib/${PROJECT_NAME})
 
-install(DIRECTORY launch 
+install(DIRECTORY launch config
   DESTINATION share/${PROJECT_NAME}/
 )
 

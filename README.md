@@ -11,13 +11,13 @@ Currently only supports POSIX operating systems.
 ## Topics
 
 ### Publishes
-- `/sick/scan`: laserscans from the LiDAR
+- `/scan`: laserscans from the LiDAR
 
 ## Params
 - `host`: IP of the LiDAR
 - `frame_id`: Frame the LiDAR publishes to.
 - `port`: Port the LiDAR is listening on.
-- `tf_correction`: Corrects scan angle for the tf frame(?)
+- `tf_correction`: Corrects scan angle for the tf frame
 
 ## Potential Improvements
 Lots and Lots of refactoring 

@@ -30,13 +30,16 @@ from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
-
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
+
     # ROS packages
     pkg_sick = get_package_share_directory('ros2_sick')
+
+    # config
+    sensor_config = os.path.join(pkg_sick, 'config', 'sick_lms111.yaml')
 
     # Launch arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
@@ -46,7 +49,12 @@ def generate_launch_description():
         package='ros2_sick',
         executable='ros2_sick',
         name='ros2_sick',
+        remappings=[
+            ('/sick/scan', '/scan'),
+        ],
+        parameters=[sensor_config],
         output='screen',
+
     )
 
     return LaunchDescription([

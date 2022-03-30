@@ -14,7 +14,7 @@ Currently only supports POSIX operating systems.
 potential_improvements = '''Lots and Lots of refactoring'''
 
 [[nodes.publishes]]
-name = '/sick/scan'
+name = '/scan'
 description = 'laserscans from the LiDAR'
 
 [[nodes.params]]
