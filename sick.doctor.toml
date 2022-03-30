@@ -14,7 +14,7 @@ Currently only supports POSIX operating systems.
 potential_improvements = '''Lots and Lots of refactoring'''
 
 [[nodes.publishes]]
-name = '/scan'
+name = '/sick/scan'
 description = 'laserscans from the LiDAR'
 
 [[nodes.params]]
@@ -31,10 +31,14 @@ description = 'Port the LiDAR is listening on.'
 
 [[nodes.params]]
 name = 'tf_correction'
-description = 'Corrects scan angle for the tf frame(?)'
+description = 'Corrects scan angle for the tf frame'
 
 [[nodes.launch]]
 file_path = './launch/ros2_sick.launch.py'
 usage = ''' 
-Just launches the node without args.
+Launches the node with parameters set by a config yaml.
 '''
+
+[[nodes.launch.remap]]
+from = '/sick/scan'
+to = 'scan'
