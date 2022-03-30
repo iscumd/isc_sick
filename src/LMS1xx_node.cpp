@@ -74,7 +74,6 @@ void Sick::construct_scan()
     scan_msg.angle_max = ((double)cfg.stopAngle ) / 10000.0 * DEG2RAD;
   }
 
-  //int angle_range = outputRange.stopAngle - outputRange.startAngle;
   int num_values;
 
   if (cfg.angleResolution == 2500)
