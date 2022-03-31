@@ -21,6 +21,8 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(laser_geometry REQUIRED)
+find_package(tf2 REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -35,6 +37,8 @@ ament_target_dependencies(
   sensor_msgs
   std_msgs
   geometry_msgs
+  laser_geometry
+  tf2
 )
 
 target_include_directories(ros2_sick PUBLIC
