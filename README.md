@@ -11,7 +11,8 @@ Currently only supports POSIX operating systems.
 ## Topics
 
 ### Publishes
-- `/sick/scan`: laserscans from the LiDAR
+- `/scan`: laserscans from the LiDAR
+- `/points`: 2D PointCloud2s from the LiDAR
 
 ## Params
 - `host`: IP of the LiDAR
@@ -29,7 +30,3 @@ Lots and Lots of refactoring
   
 Launches the node with parameters set by a config yaml.
  
-
-### Remappings
-- from `/sick/scan` to `scan`
-
