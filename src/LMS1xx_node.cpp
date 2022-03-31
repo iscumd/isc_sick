@@ -16,7 +16,10 @@ Sick::Sick(rclcpp::NodeOptions options)
   tf_correction = this->declare_parameter("tf_correction", true);
 
   ls_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>(
-    "/sick/scan", 10);
+    "/scan", 10);
+
+  pc_publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(
+    "/points", 10);
 }
 
 void Sick::connect_lidar()
@@ -137,7 +140,6 @@ void Sick::get_measurements()
   while (rclcpp::ok())
   {
     scan_msg.header.stamp = this->get_clock()->now();
-
     scanData data;
     if (laser.getScanData(&data))
     {
@@ -151,6 +153,7 @@ void Sick::get_measurements()
         scan_msg.intensities[i] = data.rssi1[i];
       }
       publish_scan();
+      publish_cloud();
     }
     else
     {
@@ -163,10 +166,16 @@ void Sick::get_measurements()
   laser.disconnect();
 }
 
-
 void Sick::publish_scan()
 {
   ls_publisher_->publish(scan_msg);
+}
+
+void Sick::publish_cloud()
+{
+  sensor_msgs::msg::PointCloud2 cloud_msg;
+  projector.projectLaser(scan_msg, cloud_msg); // perform a projection using laser_geometry
+  pc_publisher_->publish(cloud_msg);
 }
 
 } // namespace sick

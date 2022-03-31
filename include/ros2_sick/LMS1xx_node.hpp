@@ -31,6 +31,7 @@
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "sensor_msgs/msg/imu.hpp"
+#include "laser_geometry/laser_geometry.hpp"
 
 #include <ros2_sick/LMS1xx/LMS1xx.h>
 #include <tf2/exceptions.h>
@@ -65,9 +66,11 @@ private:
     bool tf_correction{};
     int reconnect_timeout{0};
     sensor_msgs::msg::LaserScan scan_msg;
+    laser_geometry::LaserProjection projector;
 
     // publishers
     rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr ls_publisher_;
+    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pc_publisher_;
 
     /**
     * @brief construct a scan message based on the
@@ -87,6 +90,11 @@ private:
     */
     void publish_scan();
 
+    /**
+    * @brief publishes cloud messages
+    */
+    void publish_cloud();
+
 };
 
-}
+} // namespace sick
