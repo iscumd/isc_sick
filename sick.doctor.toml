@@ -3,19 +3,20 @@ repo = "https://github.com/iscumd/isc_sick"
 
 [[nodes]]
 node_name = 'ros2_sick'
-#Relitive to this file
-source_file = ['./src/ros2_sick.cpp']
+source_file = ['/src/ros2_sick.cpp']
 summary = '''
-This is a Ros2 Driver for the Sick LMS-111 2D LiDAR.
-
+This is a Ros2 Driver for the Sick LMS-111 2D LiDAR. With the current iteration it supports IPv4 at a transmission rate of 10/100MBit
 Currently only supports POSIX operating systems.
 '''
-
-potential_improvements = '''Lots and Lots of refactoring'''
+potential_improvements = '''Lots and Lots of refactoring, allowing serial communication with the LiDAR'''
 
 [[nodes.publishes]]
-name = '/sick/scan'
+name = '/scan'
 description = 'laserscans from the LiDAR'
+
+[[nodes.publishes]]
+name = '/points'
+description = 'pointcloud representation of the laserscan returned from the LiDAR'
 
 [[nodes.params]]
 name = 'host'
@@ -33,12 +34,9 @@ description = 'Port the LiDAR is listening on.'
 name = 'tf_correction'
 description = 'Corrects scan angle for the tf frame'
 
+
 [[nodes.launch]]
 file_path = './launch/ros2_sick.launch.py'
 usage = ''' 
 Launches the node with parameters set by a config yaml.
 '''
-
-[[nodes.launch.remap]]
-from = '/sick/scan'
-to = 'scan'

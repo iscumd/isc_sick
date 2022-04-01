@@ -1,18 +1,17 @@
 # ros2_sick
 From package '[ros2_sick](https://github.com/iscumd/isc_sick)'
 # File
-`./src/ros2_sick.cpp`
+`/src/ros2_sick.cpp`
 
 ## Summary 
- This is a Ros2 Driver for the Sick LMS-111 2D LiDAR.
-
+ This is a Ros2 Driver for the Sick LMS-111 2D LiDAR. With the current iteration it supports IPv4 at a transmission rate of 10/100MBit
 Currently only supports POSIX operating systems.
 
 ## Topics
 
 ### Publishes
 - `/scan`: laserscans from the LiDAR
-- `/points`: 2D PointCloud2s from the LiDAR
+- `/points`: pointcloud representation of the laserscan returned from the LiDAR
 
 ## Params
 - `host`: IP of the LiDAR
@@ -21,7 +20,7 @@ Currently only supports POSIX operating systems.
 - `tf_correction`: Corrects scan angle for the tf frame
 
 ## Potential Improvements
-Lots and Lots of refactoring 
+Lots and Lots of refactoring, allowing serial communication with the LiDAR 
 
 # Launch
 ## File 
@@ -30,3 +29,4 @@ Lots and Lots of refactoring
   
 Launches the node with parameters set by a config yaml.
  
+
