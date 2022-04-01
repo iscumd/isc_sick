@@ -51,7 +51,6 @@ def generate_launch_description():
         name='ros2_sick',
         parameters=[sensor_config],
         output='screen',
-
     )
 
     return LaunchDescription([
