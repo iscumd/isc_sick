@@ -49,9 +49,6 @@ def generate_launch_description():
         package='ros2_sick',
         executable='ros2_sick',
         name='ros2_sick',
-        remappings=[
-            ('/sick/scan', '/scan'),
-        ],
         parameters=[sensor_config],
         output='screen',
 
