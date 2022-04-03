@@ -11,8 +11,9 @@
 
 #include <ros2_sick/LMS1xx/lms_buffer.h>
 #include <ros2_sick/LMS1xx/lms_structs.h>
-#include <string>
 #include <stdint.h>
+
+#include <string>
 
 typedef enum
 {
@@ -35,7 +36,7 @@ typedef enum
 
 class LMS1xx
 {
-public:
+  public:
   LMS1xx();
   virtual ~LMS1xx();
 
@@ -101,14 +102,14 @@ public:
   * - stop angle.
   * @param cfg structure containing scan configuration.
   */
-  void setScanCfg(const scanCfg &cfg);
+  void setScanCfg(const scanCfg& cfg);
 
   /*!
   * @brief Set scan data configuration.
   * Set format of scan message returned by device.
   * @param cfg structure containing scan data configuration.
   */
-  void setScanDataCfg(const scanDataCfg &cfg);
+  void setScanDataCfg(const scanDataCfg& cfg);
 
   /*!
   * @brief Get current output range configuration.
@@ -147,7 +148,7 @@ public:
   */
   void startDevice();
 
-protected:
+  protected:
   /*!
   * @brief Receive single scan message.
   * @param data pointer to scanData buffer structure.
@@ -160,4 +161,3 @@ protected:
 };
 
 #endif /* LMS1XX_H_ */
-

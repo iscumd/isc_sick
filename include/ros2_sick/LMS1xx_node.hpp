@@ -22,79 +22,76 @@
 
 #pragma once
 
-#include <memory>
-#include <chrono>
-
-
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/header.hpp"
-#include "sensor_msgs/msg/point_cloud2.hpp"
-#include "sensor_msgs/msg/laser_scan.hpp"
-#include "sensor_msgs/msg/imu.hpp"
-#include "laser_geometry/laser_geometry.hpp"
-
 #include <ros2_sick/LMS1xx/LMS1xx.h>
 #include <tf2/exceptions.h>
-#include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
+
+#include <chrono>
+#include <memory>
+
+#include "laser_geometry/laser_geometry.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/imu.hpp"
+#include "sensor_msgs/msg/laser_scan.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
+#include "std_msgs/msg/header.hpp"
 #include "string"
 
-namespace Sick 
+namespace Sick
 {
-class Sick : public rclcpp::Node 
+class Sick : public rclcpp::Node
 {
-public:
-    explicit Sick(rclcpp::NodeOptions options);
+  public:
+  explicit Sick(rclcpp::NodeOptions options);
 
-    /**
+  /**
     * @brief connect to the Sick LMS1xx lidar
     */
-    void connect_lidar();
+  void connect_lidar();
 
-private:
+  private:
+  // laser data
+  LMS1xx laser;
+  scanCfg cfg;
+  scanOutputRange outputRange;
+  scanDataCfg dataCfg;
 
-    // laser data
-    LMS1xx laser;
-    scanCfg cfg;
-    scanOutputRange outputRange;
-    scanDataCfg dataCfg;
+  // parameters
+  std::string host{};
+  std::string frame_id{};
+  int port{2112};
+  bool tf_correction{};
+  int reconnect_timeout{0};
+  sensor_msgs::msg::LaserScan scan_msg;
+  laser_geometry::LaserProjection projector;
 
-    // parameters
-    std::string host{};
-    std::string frame_id{};
-    int port{2112};
-    bool tf_correction{};
-    int reconnect_timeout{0};
-    sensor_msgs::msg::LaserScan scan_msg;
-    laser_geometry::LaserProjection projector;
+  // publishers
+  rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr ls_publisher_;
+  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pc_publisher_;
 
-    // publishers
-    rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr ls_publisher_;
-    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pc_publisher_;
-
-    /**
+  /**
     * @brief construct a scan message based on the
     * configuration of the sick lidar
     * @param scan sensor_msgs::msg::laserscan
     */
-    void construct_scan();
+  void construct_scan();
 
-    /**
+  /**
     * @brief get measurements from the lidar after it has 
     * been setup properly
     */
-    void get_measurements();
+  void get_measurements();
 
-    /**
+  /**
     * @brief publishes scan messages
     */
-    void publish_scan();
+  void publish_scan();
 
-    /**
+  /**
     * @brief publishes cloud messages
     */
-    void publish_cloud();
-
+  void publish_cloud();
 };
 
-} // namespace sick
+}  // namespace Sick
