@@ -6,8 +6,7 @@
 
 */
 
-#ifndef LMS1XX_LMS_STRUCTS_H_
-#define LMS1XX_LMS_STRUCTS_H_
+#pragma once
 
 #include <stdint.h>
 
@@ -187,5 +186,3 @@ struct scanData
    */
   uint16_t rssi2[1082];
 };
-
-#endif  // LMS1XX_LMS_STRUCTS_H_

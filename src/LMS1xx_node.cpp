@@ -5,7 +5,7 @@
 
 #include "ros2_sick/LMS1xx/LMS1xx.h"
 
-#define DEG2RAD M_PI / 180.0  // TODO get rid of this!!
+constexpr double DEG2RAD = M_PI / 180.0;
 
 namespace Sick
 {
@@ -147,7 +147,7 @@ void Sick::get_measurements()
   {
     scan_msg.header.stamp = this->get_clock()->now();
     scanData data;
-    if (laser.getScanData(&data))
+    if (laser.getScanData(data))
     {
       for (int i = 0; i < data.dist_len1; i++)
       {
