@@ -6,7 +6,7 @@ if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
 endif()
 
-# Default to C++14
+# Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
 endif()
@@ -23,8 +23,6 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(laser_geometry REQUIRED)
 find_package(tf2 REQUIRED)
-# fmt is available as a rosdep
-find_package(fmt REQUIRED)
 
 add_executable(ros2_sick 
   src/LMS1xx_node.cpp
@@ -38,7 +36,6 @@ ament_target_dependencies(
   geometry_msgs
   laser_geometry
   tf2
-  fmt
 )
 
 target_include_directories(ros2_sick PUBLIC
