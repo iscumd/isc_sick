@@ -15,7 +15,7 @@
 
 #include <string>
 
-typedef enum
+enum status_t
 {
   undefined = 0,
   initialisation = 1,
@@ -25,7 +25,7 @@ typedef enum
   in_preparation = 5,
   ready = 6,
   ready_for_measurement = 7
-} status_t;
+};
 
 /*!
 * @class LMS1xx
@@ -133,7 +133,7 @@ class LMS1xx
   * @return true if scan was read successfully, false if error or timeout. False implies that higher level
   *         logic should take correct action such as reopening the connection.
   */
-  bool getScanData(scanData* scan_data);
+  bool getScanData(scanData& scan_data);
 
   /*!
   * @brief Save data permanently.
@@ -153,11 +153,14 @@ class LMS1xx
   * @brief Receive single scan message.
   * @param data pointer to scanData buffer structure.
   */
-  static void parseScanData(char* buf, scanData* data);
+  static void parseScanData(char* buf, scanData& data);
 
   bool connected_;
   LMSBuffer buffer_;
   int socket_fd_;
+
+  /// The buffer used for string and IO operations. Can blindly use as we are not in a threaded context, so old data is simply overwritten.
+  mutable char buf[200];
 };
 
 #endif /* LMS1XX_H_ */

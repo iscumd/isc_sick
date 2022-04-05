@@ -23,9 +23,8 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(laser_geometry REQUIRED)
 find_package(tf2 REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+# fmt is available as a rosdep
+find_package(fmt REQUIRED)
 
 add_executable(ros2_sick 
   src/LMS1xx_node.cpp
@@ -39,6 +38,7 @@ ament_target_dependencies(
   geometry_msgs
   laser_geometry
   tf2
+  fmt
 )
 
 target_include_directories(ros2_sick PUBLIC

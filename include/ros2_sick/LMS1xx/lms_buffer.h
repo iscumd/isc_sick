@@ -6,18 +6,17 @@
 
 */
 
-#ifndef LMS1XX_LMS_BUFFER_H_
-#define LMS1XX_LMS_BUFFER_H_
+#pragma once
 
 #include <stdint.h>
 #include <string.h>
 #include <unistd.h>
+#include <cstdint>
 #include <cstdio>
 
-
-#define LMS_BUFFER_SIZE 50000
-#define LMS_STX 0x02
-#define LMS_ETX 0x03
+constexpr uint16_t LMS_BUFFER_SIZE = 50000;
+constexpr uint8_t LMS_STX  = 0x02;
+constexpr uint8_t LMS_ETX = 0x03;
 
 class LMSBuffer
 {
@@ -110,5 +109,3 @@ private:
 
   char* end_of_first_message_;
 };
-
-#endif  // LMS1XX_LMS_BUFFER_H_
