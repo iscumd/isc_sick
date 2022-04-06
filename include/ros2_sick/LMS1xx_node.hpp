@@ -25,7 +25,6 @@
 #include <ros2_sick/LMS1xx/LMS1xx.h>
 #include <tf2/exceptions.h>
 #include <tf2_ros/buffer.h>
-#include <tf2_ros/transform_listener.h>
 
 #include <chrono>
 #include <memory>
@@ -82,11 +81,6 @@ class Sick : public rclcpp::Node
     * been setup properly
     */
   void get_measurements();
-
-  /**
-    * @brief publishes scan messages
-    */
-  void publish_scan();
 
   /**
     * @brief publishes cloud messages

@@ -26,7 +26,7 @@ Sick::Sick(rclcpp::NodeOptions options) : Node("sick_node", options)
 void Sick::connect_lidar()
 {
   RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
-  laser.connect(host, port);
+  //laser.connect(host, port);
 
   if (!laser.isConnected())
   {
@@ -65,7 +65,7 @@ void Sick::connect_lidar()
 void Sick::construct_scan()
 {
   scan_msg.header.frame_id = frame_id;
-  scan_msg.range_min = 0.01;
+  scan_msg.range_min = 0.5;
   scan_msg.range_max = 20.0;
   scan_msg.scan_time = 100.0 / cfg.scaningFrequency;
   scan_msg.angle_increment =
@@ -158,7 +158,7 @@ void Sick::get_measurements()
       {
         scan_msg.intensities[i] = data.rssi1[i];
       }
-      publish_scan();
+      ls_publisher_->publish(scan_msg);
       publish_cloud();
     }
     else
@@ -173,8 +173,6 @@ void Sick::get_measurements()
   laser.stopMeas();
   laser.disconnect();
 }
-
-void Sick::publish_scan() { ls_publisher_->publish(scan_msg); }
 
 void Sick::publish_cloud()
 {
