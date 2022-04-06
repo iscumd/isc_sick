@@ -26,7 +26,7 @@ Sick::Sick(rclcpp::NodeOptions options) : Node("sick_node", options)
 void Sick::connect_lidar()
 {
   RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
-  //laser.connect(host, port);
+  laser.connect(host, port);
 
   if (!laser.isConnected())
   {
