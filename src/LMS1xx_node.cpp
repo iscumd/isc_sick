@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <memory>
+#include <chrono>
 
 #include "ros2_sick/LMS1xx/LMS1xx.h"
 
@@ -32,11 +33,13 @@ void Sick::connect_lidar()
   {
     //Attempt to connect to the lidar 5 times before giving up
     RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
-
+    
     while (!laser.isConnected())
     {
       laser.connect(host, port);
+
       RCLCPP_ERROR(this->get_logger(), "Unable to connect, retrying.");
+
       if (reconnect_timeout > 5)
       {
         RCLCPP_FATAL(this->get_logger(),
@@ -48,6 +51,9 @@ void Sick::connect_lidar()
       {
         reconnect_timeout++;
       }
+      
+      // timer
+      rclcpp::sleep_for(std::chrono::seconds(5));      
     }
     return;
   }
