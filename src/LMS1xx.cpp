@@ -56,27 +56,22 @@ bool LMS1xx::isConnected() { return connected_; }
 
 void LMS1xx::startMeas()
 {
-  //std::cout << buf << 0x02 << " sMN LMCstartmeas " << 0x03 << std::endl;
-
   sprintf(buf, "%c%s%c", 0x02, "sMN LMCstartmeas", 0x03);
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02) std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  std::cout << "RX " << buf << std::endl;
 }
 
 void LMS1xx::stopMeas()
 {
-  std::cout << buf << 0x02 << " sMN LMCstartmeas " << 0x03 << std::endl;
-
+  sprintf(buf, "%c%s%c", 0x02, "sMN LMCstopmeas", 0x03);
   write(socket_fd_, buf, strlen(buf));
 
   int len = read(socket_fd_, buf, 100);
   if (buf[0] != 0x02) std::cout << "invalid packet recieved" << std::endl;
   buf[len] = 0;
-  std::cout << "RX " << buf << std::endl;
 }
 
 status_t LMS1xx::queryStatus()
@@ -212,9 +207,7 @@ bool LMS1xx::getScanData(scanData& scan_data)
     tv.tv_sec = 0;
     tv.tv_usec = 400000;
 
-    //std::cout << "entering select() " << tv.tv_usec << std::endl;
     int retval = select(socket_fd_ + 1, &rfds, NULL, NULL, &tv);
-    //std::cout << "returned " << retval << "from select()" << std::endl;
     if (retval)
     {
       buffer_.readFrom(socket_fd_);
@@ -319,7 +312,6 @@ void LMS1xx::parseScanData(char* buffer, scanData& data)
     tok = strtok(NULL, " ");  //NumberData
     int NumberData;
     sscanf(tok, "%X", &NumberData);
-    //std::cout << "NumberData : "  << NumberData << std::endl;
 
     switch (type)
     {
@@ -368,7 +360,6 @@ void LMS1xx::parseScanData(char* buffer, scanData& data)
   tok = strtok(NULL, " ");  //NumberChannels8Bit
   int NumberChannels8Bit;
   sscanf(tok, "%d", &NumberChannels8Bit);
-  //std::cout << "NumberChannels8Bit : " << NumberChannels8Bit << std::endl;
 
   for (int i = 0; i < NumberChannels8Bit; i++)
   {
@@ -406,7 +397,6 @@ void LMS1xx::parseScanData(char* buffer, scanData& data)
     tok = strtok(NULL, " ");  //NumberData
     int NumberData;
     sscanf(tok, "%X", &NumberData);
-    //std::cout << "NumberData : " << NumberData << std::endl;
 
     switch (type)
     {

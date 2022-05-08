@@ -1,10 +1,9 @@
-#include "ros2_sick/LMS1xx_node.hpp"
-
 #include <functional>
 #include <memory>
 #include <chrono>
 
 #include "ros2_sick/LMS1xx/LMS1xx.h"
+#include "ros2_sick/LMS1xx_node.hpp"
 
 constexpr double DEG2RAD = M_PI / 180.0;
 
@@ -175,9 +174,6 @@ void Sick::get_measurements()
       break;
     }
   }
-  laser.scanContinous(0);
-  laser.stopMeas();
-  laser.disconnect();
 }
 
 void Sick::publish_scan() { ls_publisher_->publish(scan_msg); }
@@ -191,6 +187,12 @@ void Sick::publish_cloud()
   pc_publisher_->publish(cloud_msg);
 }
 
+Sick::~Sick()
+{
+  laser.scanContinous(0); // stop getting scans from data stream
+  laser.stopMeas(); // stop measuring  
+  laser.disconnect(); // disconnect and close the socket
+}
 }  // namespace Sick
 
 int main(int argc, char* argv[])

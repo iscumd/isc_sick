@@ -44,6 +44,7 @@ class Sick : public rclcpp::Node
 {
   public:
   explicit Sick(rclcpp::NodeOptions options);
+  ~Sick();
 
   /**
     * @brief connect to the Sick LMS1xx lidar
@@ -61,7 +62,7 @@ class Sick : public rclcpp::Node
   std::string host{};
   std::string frame_id{};
   int port{2112};
-  bool tf_correction{};
+  bool tf_correction{true};
   int reconnect_timeout{0};
   sensor_msgs::msg::LaserScan scan_msg;
   laser_geometry::LaserProjection projector;
