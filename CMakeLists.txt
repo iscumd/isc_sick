@@ -23,6 +23,7 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(laser_geometry REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 add_executable(ros2_sick 
   src/LMS1xx_node.cpp
@@ -36,6 +37,7 @@ ament_target_dependencies(
   geometry_msgs
   laser_geometry
   tf2
+  tf2_ros
 )
 
 target_include_directories(ros2_sick PUBLIC
