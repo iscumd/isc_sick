@@ -29,21 +29,20 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
-
     # ROS packages
     pkg_sick = get_package_share_directory('ros2_sick')
 
     # config
-    sensor_config = os.path.join(pkg_sick, 'config', 'sick_lms111.yaml')
+    sensor_config = LaunchConfiguration('config_file')
 
     # Launch arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
-    
+
     # Nodes
     sick_driver = Node(
         package='ros2_sick',
@@ -56,6 +55,9 @@ def generate_launch_description():
     return LaunchDescription([
         # Launch Arguments
         DeclareLaunchArgument('use_sim_time', default_value='false',
+                              description='Use simulation time if true'),
+        DeclareLaunchArgument('config_file',
+                              default_value=PathJoinSubstitution([pkg_sick, 'config', 'sick_lms111.yaml']),
                               description='Use simulation time if true'),
         # Nodes
         sick_driver,

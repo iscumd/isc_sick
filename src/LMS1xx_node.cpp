@@ -1,8 +1,8 @@
 #include "ros2_sick/LMS1xx_node.hpp"
 
+#include <chrono>
 #include <functional>
 #include <memory>
-#include <chrono>
 
 #include "ros2_sick/LMS1xx/LMS1xx.h"
 
@@ -26,14 +26,15 @@ Sick::Sick(rclcpp::NodeOptions options) : Node("sick_node", options)
 
 void Sick::connect_lidar()
 {
-  RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
+  RCLCPP_INFO(this->get_logger(), "Connecting to Lidar at %s",
+              this->host.c_str());
   laser.connect(host, port);
 
   if (!laser.isConnected())
   {
     //Attempt to connect to the lidar 5 times before giving up
     RCLCPP_INFO(this->get_logger(), "Connecting to Lidar");
-    
+
     while (!laser.isConnected())
     {
       laser.connect(host, port);
@@ -51,9 +52,9 @@ void Sick::connect_lidar()
       {
         reconnect_timeout++;
       }
-      
+
       // timer
-      rclcpp::sleep_for(std::chrono::seconds(5));      
+      rclcpp::sleep_for(std::chrono::seconds(5));
     }
     return;
   }
